@@ -1,50 +1,45 @@
-$('.addModal').on('click', function (){
+$(".addModal").on("click", function () {
     formReset();
-    modalShow('myModal','Add Data');
+    modalShow("myModal", "Add Data");
 });
 
-
-$('.addModalImport').on('click', function (){
+$(".addModalImport").on("click", function () {
     formReset();
-    modalShow('myModal','Import Data');
+    modalShow("myModal", "Import Data");
 });
 
-$('#myModal').on('hidden.bs.modal', function (){
+$("#myModal").on("hidden.bs.modal", function () {
     formReset();
 });
 
 function deleteCookie(name) {
-    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 }
 
-function validateSwal(text)
-{
+function validateSwal(text) {
     Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
+        icon: "error",
+        title: "Oops...",
         text: `${text}`,
-    }).then(function (){
-
-    });
+    }).then(function () {});
 }
 
-function validateDateInput(dt1, dt2)
-{
-    if (dt1 == '') {
-        validateSwal('Start Date Required', tgl1);
+function validateDateInput(dt1, dt2) {
+    if (dt1 == "") {
+        validateSwal("Start Date Required", tgl1);
         // $("#tgl1").focus();
         return false;
     }
 
-    if (dt2 == '') {
-        validateSwal('End Date Required');
+    if (dt2 == "") {
+        validateSwal("End Date Required");
         // $("#tgl2").focus();
         return false;
     }
 
-    if (dt1 > dt2){
-        validateSwal('Please Select Correct Date');
-        return false
+    if (dt1 > dt2) {
+        validateSwal("Please Select Correct Date");
+        return false;
     }
 }
 
@@ -52,30 +47,90 @@ function activeInactiveColor(param) {
     let color;
     switch (param) {
         case 1:
-            color = 'success';
+            color = "success";
             break;
         case 0:
-            color = 'danger';
+            color = "danger";
             break;
-        default :
-            color = 'danger'
+
+        default:
+            color = "danger";
+    }
+    return color;
+}
+
+function approveWaitingColor(param) {
+    let color;
+    switch (param) {
+        case "APPROVED":
+            color = "success";
+            break;
+        case "WAITING":
+            color = "danger";
+            break;
+
+        default:
+            color = "danger";
+    }
+    return color;
+}
+
+function setTagColorOrderType(param) {
+    //
+    let color;
+    switch (param) {
+        case 0:
+            color = "success";
+            break;
+        case 1:
+            color = "danger";
+            break;
+        default:
+            color = "success";
+    }
+    return color;
+}
+
+function setTagColor(param) {
+    let color;
+    switch (param.name) {
+        case "OPEN":
+            color = "danger";
+            break;
+        case "URGENT":
+            color = "danger";
+            break;
+        case "CLOSE":
+            color = "success";
+            break;
+        case "LOW":
+            color = "success";
+            break;
+        case "PROCESS":
+            color = "warning";
+            break;
+        case "MEDIUM":
+            color = "warning";
+            break;
+
+        default:
+            color = "danger";
     }
     return color;
 }
 
 function unescapeHTML(escapedHTML) {
-    return escapedHTML.replace(/&lt;/g,'<').replace(/&gt;/g,'>')
+    return escapedHTML.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 }
 
-function swalStatus2(result, modalId, timer, table, modalHide = true)
-{
+function swalStatus2(result, modalId, timer, table, modalHide = true) {
     let message = "";
-    if (result.status == 'error'){
-        $.each(result.message, function (item, val){
-            message +=  ` <span class="la la-exclamation red"> ${val}</span><br>`;
-        })
-    }else{
-        message = result.message
+    if (result.status == "error") {
+        $.each(result.message, function (item, val) {
+            message += ` <span class="la la-exclamation red"> ${val}</span><br>`;
+        });
+    } else {
+        message = result.message;
     }
     Swal.fire({
         icon: `${result.status}`,
@@ -85,14 +140,12 @@ function swalStatus2(result, modalId, timer, table, modalHide = true)
         showConfirmButton: false,
         timer: 1000,
     }).then(() => {
-        if (timer){
+        if (timer) {
             window.location.reload();
         }
         Swal.close();
         if (modalHide === true) modalHide(`${modalId}`);
         if (table) tableReload(table);
-
-
     });
 }
 
@@ -101,16 +154,14 @@ function replaceNbsps(str) {
     return str.replace(re, " ");
 }
 
-
-function swalStatus(result, modalId, timer, table)
-{
+function swalStatus(result, modalId, timer, table) {
     let message = "";
-    if (result.status == 'error'){
-        $.each(result.message, function (item, val){
-            message +=  ` <span class="la la-exclamation red"> ${val}</span><br>`;
-        })
-    }else{
-        message = result.message
+    if (result.status == "error") {
+        $.each(result.message, function (item, val) {
+            message += ` <span class="la la-exclamation red"> ${val}</span><br>`;
+        });
+    } else {
+        message = result.message;
     }
     Swal.fire({
         icon: `${result.status}`,
@@ -120,25 +171,21 @@ function swalStatus(result, modalId, timer, table)
         showConfirmButton: false,
         timer: 1000,
     }).then(() => {
-        if (timer && result.status !== 'error'){
+        if (timer && result.status !== "error") {
             window.location.reload();
         }
         Swal.close();
-        if (modalId)
-        {
+        if (modalId) {
             modalHide(`${modalId}`);
         }
         if (table) tableReload(table);
-
-
     });
 }
 
-function swalSuccess(result, modalId)
-{
+function swalSuccess(result, modalId) {
     Swal.fire({
-        icon: 'success',
-        title: 'Success',
+        icon: "success",
+        title: "Success",
         text: result.success,
         showCancelButton: false,
         showConfirmButton: false,
@@ -150,107 +197,139 @@ function swalSuccess(result, modalId)
     });
 }
 
-function modalShow(modalId, modalTitle, ajax = null, selectedValue = null){
-    $('.modal-title').text(modalTitle)
+function modalShow(modalId, modalTitle, ajax = null) {
+    $(".modal-title").text(modalTitle);
 
-
-    if(ajax)
-    {
+    if (ajax) {
         let html = '<option value="" selected disabled>select value</option>';
-        let selected = '';
-        $.get(ajax, function (response){
-
-            if(response.data)
-            {
+        $.get(ajax, function (response) {
+            if (response.data) {
                 $.each(response.data, function (k, v) {
-                    console.log(selectedValue === v.id)
-                    if (selectedValue === v.id){
-                        selected = 'selected'
-                    }
-
-                    if (v.name === undefined)
-                    {
-                        html += `<option value="${v.id}" ${selected}>${v.content_head}</option>`
-
-                    }else{
-                        html += `<option value="${v.id}" ${selected}>${v.name}</option>`
-                    }
-                })
+                    html += `<option value="${v.id}">${v.name}</option>`;
+                });
             }
 
-            $('#parent').html(html);
+            $("#parent").html(html);
         });
     }
 
-
-    $(`#${modalId}`).modal('show');
-
-    // $(`#${modalId}`).modal({backdrop: 'static', keyboard: false});
+    $(`#${modalId}`).modal({ backdrop: "static", keyboard: false });
 }
 
-function modalHide(modalId){
+function modalHide(modalId) {
     $(`#${modalId}`).modal("hide");
 }
 
-function tableReload(tableName)
-{
-
+function tableReload(tableName) {
     tableName.ajax.reload();
 }
 
-function formReset(select = false) {
-    $('#formModal')[0].reset();
-    $('#tbl-access tbody').html('');
-    $("#id").val('');
-    $("label.error").hide();
-    $(".error").removeClass("error");
+function formReset() {
+    $("#formModal")[0].reset();
+    $("#tbl-access tbody").html("");
+    $("#id").val("");
     $("#formModal fieldset").removeClass("validate", true);
-
-    if (select)
-    {
-        $("#formModal select").val('').trigger('change');
-
-    }
 
     formEnable();
 }
 
-function formDisable(){
+function formResetId(formID) {
+    $(`#${formID}`)[0].reset();
+    $("#tbl-access tbody").html("");
+    $("#id").val("");
+    $(`#${formID} fieldset`).removeClass("validate", true);
+
+    formEnable();
+}
+
+function formDisable() {
     $("#formModal input").prop("disabled", true);
     $("#formModal textarea").prop("disabled", true);
     $("#formModal select").prop("disabled", true);
     $("#formModal button[type=submit]").prop("disabled", true);
 }
 
-function formEnable(){
+function formEnable() {
     $("#formModal input").removeAttr("disabled", true);
     $("#formModal select").removeAttr("disabled", true);
     $("#formModal button").removeAttr("disabled", true);
 }
 
-function formEnableCustom(arrayField){
+function formEnableCustom(arrayField) {
     $("#formModal input").prop("disabled", true);
     $("#formModal textarea").prop("disabled", true);
     $("#formModal select").prop("disabled", true);
     // $("#formModal button[type=submit]").prop("disabled", true);
     $("#formModal button").removeAttr("disabled", true);
 
-    $.each(arrayField, function(k, v){
+    $.each(arrayField, function (k, v) {
         $(`#${v}`).removeAttr("disabled", true);
     });
 }
 
+function visitStatusLogic(data) {
+    let html = "";
+    switch (data) {
+        case "LUNAS":
+            html = `<div class='badge badge-success'>${data}</div>`;
+            break;
+        case "-":
+            html = `<div class='badge badge-danger'>${data}</div>`;
+            break;
+        default:
+            html = `<div class='badge badge-danger'>${data}</div>`;
+    }
+    return html;
+}
 
-$('.number-only').on('input', function (event) {
-    this.value = this.value.replace(/[^0-9]/g, '');
+function dpdLogic(data) {
+    let html = "",
+        str = data.toString();
+    // console.log(str.substring(0,1));
+    // console.log(str.substring(0,1));
+
+    switch (str.substring(0, 1)) {
+        case "-":
+            let res = data.substring(1);
+            html = `<div class='badge badge-danger'>+${res}</div>`;
+            break;
+        case "C":
+            html = `<div class='badge badge-success'>${data}</div>`;
+            break;
+        default:
+            html = `<div class='badge badge-warning'>-${data}</div>`;
+            break;
+    }
+
+    return html;
+}
+
+function releaseStatusColor(data) {
+    let html = "";
+    switch (data) {
+        case "NEW":
+            html = `<div class='badge badge-danger'>${data}</div>`;
+            break;
+        case "PENDING":
+            html = `<div class='badge badge-warning'>${data}</div>`;
+            break;
+        case "APPROVED":
+            html = `<div class='badge badge-success'>${data}</div>`;
+            break;
+        default:
+            html = `<div class='badge badge-sucess'>${data}</div>`;
+            break;
+    }
+    return html;
+}
+
+$(".number-only").on("input", function (event) {
+    this.value = this.value.replace(/[^0-9]/g, "");
 });
-function convertToSlug(Text)
-{
-    return Text
-        .toLowerCase()
-        .replace(/ /g,'-')
-        .replace(/[^\w-]+/g,'')
-        ;
+function convertToSlug(Text) {
+    return Text.toLowerCase()
+        .replace(/ /g, "-")
+        .replace(/[^\w-]+/g, "");
 }
 
 const showParagraph = (targetId, paragraphText, displayLimit) => {
@@ -288,272 +367,215 @@ const showParagraph = (targetId, paragraphText, displayLimit) => {
     } else {
         pTagElem.appendChild(document.createTextNode(paragraphText));
     }
-    document.getElementById(targetId) ?
-        document.getElementById(targetId).appendChild(pTagElem) :
-        document.body.appendChild(pTagElem);
+    document.getElementById(targetId)
+        ? document.getElementById(targetId).appendChild(pTagElem)
+        : document.body.appendChild(pTagElem);
 };
 
-function thousands_separators(num)
-{
+function thousands_separators(num) {
     var num_parts = num.toString().split(".");
     num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return num_parts.join(".");
 }
 const style = [
     {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [
             {
-                "color": "#e9e9e9"
+                color: "#e9e9e9",
             },
             {
-                "lightness": 17
-            }
-        ]
+                lightness: 17,
+            },
+        ],
     },
     {
-        "featureType": "landscape",
-        "elementType": "geometry",
-        "stylers": [
+        featureType: "landscape",
+        elementType: "geometry",
+        stylers: [
             {
-                "color": "#f5f5f5"
+                color: "#f5f5f5",
             },
             {
-                "lightness": 20
-            }
-        ]
+                lightness: 20,
+            },
+        ],
     },
     {
-        "featureType": "road.highway",
-        "elementType": "geometry.fill",
-        "stylers": [
+        featureType: "road.highway",
+        elementType: "geometry.fill",
+        stylers: [
             {
-                "color": "#ffffff"
+                color: "#ffffff",
             },
             {
-                "lightness": 17
-            }
-        ]
+                lightness: 17,
+            },
+        ],
     },
     {
-        "featureType": "road.highway",
-        "elementType": "geometry.stroke",
-        "stylers": [
+        featureType: "road.highway",
+        elementType: "geometry.stroke",
+        stylers: [
             {
-                "color": "#ffffff"
+                color: "#ffffff",
             },
             {
-                "lightness": 29
+                lightness: 29,
             },
             {
-                "weight": 0.2
-            }
-        ]
+                weight: 0.2,
+            },
+        ],
     },
     {
-        "featureType": "road.arterial",
-        "elementType": "geometry",
-        "stylers": [
+        featureType: "road.arterial",
+        elementType: "geometry",
+        stylers: [
             {
-                "color": "#ffffff"
+                color: "#ffffff",
             },
             {
-                "lightness": 18
-            }
-        ]
+                lightness: 18,
+            },
+        ],
     },
     {
-        "featureType": "road.local",
-        "elementType": "geometry",
-        "stylers": [
+        featureType: "road.local",
+        elementType: "geometry",
+        stylers: [
             {
-                "color": "#ffffff"
+                color: "#ffffff",
             },
             {
-                "lightness": 16
-            }
-        ]
+                lightness: 16,
+            },
+        ],
     },
     {
-        "featureType": "poi",
-        "elementType": "geometry",
-        "stylers": [
+        featureType: "poi",
+        elementType: "geometry",
+        stylers: [
             {
-                "color": "#f5f5f5"
+                color: "#f5f5f5",
             },
             {
-                "lightness": 21
-            }
-        ]
+                lightness: 21,
+            },
+        ],
     },
     {
-        "featureType": "poi.park",
-        "elementType": "geometry",
-        "stylers": [
+        featureType: "poi.park",
+        elementType: "geometry",
+        stylers: [
             {
-                "color": "#dedede"
+                color: "#dedede",
             },
             {
-                "lightness": 21
-            }
-        ]
+                lightness: 21,
+            },
+        ],
     },
     {
-        "elementType": "labels.text.stroke",
-        "stylers": [
+        elementType: "labels.text.stroke",
+        stylers: [
             {
-                "visibility": "on"
+                visibility: "on",
             },
             {
-                "color": "#ffffff"
+                color: "#ffffff",
             },
             {
-                "lightness": 16
-            }
-        ]
+                lightness: 16,
+            },
+        ],
     },
     {
-        "elementType": "labels.text.fill",
-        "stylers": [
+        elementType: "labels.text.fill",
+        stylers: [
             {
-                "saturation": 36
+                saturation: 36,
             },
             {
-                "color": "#333333"
+                color: "#333333",
             },
             {
-                "lightness": 40
-            }
-        ]
+                lightness: 40,
+            },
+        ],
     },
     {
-        "elementType": "labels.icon",
-        "stylers": [
+        elementType: "labels.icon",
+        stylers: [
             {
-                "visibility": "off"
-            }
-        ]
+                visibility: "off",
+            },
+        ],
     },
     {
-        "featureType": "transit",
-        "elementType": "geometry",
-        "stylers": [
+        featureType: "transit",
+        elementType: "geometry",
+        stylers: [
             {
-                "color": "#f2f2f2"
+                color: "#f2f2f2",
             },
             {
-                "lightness": 19
-            }
-        ]
+                lightness: 19,
+            },
+        ],
     },
     {
-        "featureType": "administrative",
-        "elementType": "geometry.fill",
-        "stylers": [
+        featureType: "administrative",
+        elementType: "geometry.fill",
+        stylers: [
             {
-                "color": "#fefefe"
+                color: "#fefefe",
             },
             {
-                "lightness": 20
-            }
-        ]
+                lightness: 20,
+            },
+        ],
     },
     {
-        "featureType": "administrative",
-        "elementType": "geometry.stroke",
-        "stylers": [
+        featureType: "administrative",
+        elementType: "geometry.stroke",
+        stylers: [
             {
-                "color": "#fefefe"
+                color: "#fefefe",
             },
             {
-                "lightness": 17
+                lightness: 17,
             },
             {
-                "weight": 1.2
-            }
-        ]
-    }
+                weight: 1.2,
+            },
+        ],
+    },
 ];
 
-function stringToArray(data){
+function stringToArray(data) {
     return data.match(/\d(\.?[0-9])*/g).map(Number);
 }
 
 const showLoading = function () {
     Swal.fire({
-        title: 'Now loading',
+        title: "Now loading",
         html: `<div class="text-center">
                                 <div class="spinner-border" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
-                            </div>`,// add html attribute if you want or remove
+                            </div>`, // add html attribute if you want or remove
         allowEscapeKey: false,
         allowOutsideClick: false,
         showCancelButton: false,
         showConfirmButton: false,
         // timer: 2000,
-    }).then(
-        () => {
-            // Swal.fire(
-            //     'Good job!',
-            //     'You clicked the button!',
-            //     'success'
-            // )
-        }
-    )
+    }).then(() => {
+        // Swal.fire(
+        //     'Good job!',
+        //     'You clicked the button!',
+        //     'success'
+        // )
+    });
 };
-
-
-chartColors = {
-    column: {
-        series1: '#826af9',
-        series2: '#d2b0ff',
-        bg: '#f8d3ff'
-    },
-    success: {
-        shade_100: '#7eefc7',
-        shade_200: '#06774f'
-    },
-    donut: {
-        series1: '#ffe700',
-        series2: '#00d4bd',
-        series3: '#826bf8',
-        series4: '#2b9bf4',
-        series5: '#FFA1A1'
-    },
-    area: {
-        series3: '#a4f8cd',
-        series2: '#60f2ca',
-        series1: '#2bdac7'
-    }
-};
-
-
-window.colors = {
-    solid: {
-        primary: '#7367F0',
-        secondary: '#82868b',
-        success: '#28C76F',
-        info: '#00cfe8',
-        warning: '#FF9F43',
-        danger: '#EA5455',
-        dark: '#4b4b4b',
-        black: '#000',
-        white: '#fff',
-        body: '#f8f8f8'
-    },
-    light: {
-        primary: '#7367F01a',
-        secondary: '#82868b1a',
-        success: '#28C76F1a',
-        info: '#00cfe81a',
-        warning: '#FF9F431a',
-        danger: '#EA54551a',
-        dark: '#4b4b4b1a'
-    }
-};
-
-
-
-
