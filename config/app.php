@@ -172,6 +172,9 @@ return [
         DigitalCloud\Blameable\BlameableServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+        OwenIt\Auditing\AuditingServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -188,6 +191,9 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ])->toArray(),
 
 ];
