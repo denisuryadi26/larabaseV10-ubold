@@ -52,67 +52,6 @@ function activeInactiveColor(param) {
         case 0:
             color = "danger";
             break;
-
-        default:
-            color = "danger";
-    }
-    return color;
-}
-
-function approveWaitingColor(param) {
-    let color;
-    switch (param) {
-        case "APPROVED":
-            color = "success";
-            break;
-        case "WAITING":
-            color = "danger";
-            break;
-
-        default:
-            color = "danger";
-    }
-    return color;
-}
-
-function setTagColorOrderType(param) {
-    //
-    let color;
-    switch (param) {
-        case 0:
-            color = "success";
-            break;
-        case 1:
-            color = "danger";
-            break;
-        default:
-            color = "success";
-    }
-    return color;
-}
-
-function setTagColor(param) {
-    let color;
-    switch (param.name) {
-        case "OPEN":
-            color = "danger";
-            break;
-        case "URGENT":
-            color = "danger";
-            break;
-        case "CLOSE":
-            color = "success";
-            break;
-        case "LOW":
-            color = "success";
-            break;
-        case "PROCESS":
-            color = "warning";
-            break;
-        case "MEDIUM":
-            color = "warning";
-            break;
-
         default:
             color = "danger";
     }
@@ -197,15 +136,25 @@ function swalSuccess(result, modalId) {
     });
 }
 
-function modalShow(modalId, modalTitle, ajax = null) {
+function modalShow(modalId, modalTitle, ajax = null, selectedValue = null) {
     $(".modal-title").text(modalTitle);
 
     if (ajax) {
         let html = '<option value="" selected disabled>select value</option>';
+        let selected = "";
         $.get(ajax, function (response) {
             if (response.data) {
                 $.each(response.data, function (k, v) {
-                    html += `<option value="${v.id}">${v.name}</option>`;
+                    console.log(selectedValue === v.id);
+                    if (selectedValue === v.id) {
+                        selected = "selected";
+                    }
+
+                    if (v.name === undefined) {
+                        html += `<option value="${v.id}" ${selected}>${v.content_head}</option>`;
+                    } else {
+                        html += `<option value="${v.id}" ${selected}>${v.name}</option>`;
+                    }
                 });
             }
 
@@ -213,7 +162,9 @@ function modalShow(modalId, modalTitle, ajax = null) {
         });
     }
 
-    $(`#${modalId}`).modal({ backdrop: "static", keyboard: false });
+    $(`#${modalId}`).modal("show");
+
+    // $(`#${modalId}`).modal({backdrop: 'static', keyboard: false});
 }
 
 function modalHide(modalId) {
@@ -224,20 +175,17 @@ function tableReload(tableName) {
     tableName.ajax.reload();
 }
 
-function formReset() {
+function formReset(select = false) {
     $("#formModal")[0].reset();
     $("#tbl-access tbody").html("");
     $("#id").val("");
+    $("label.error").hide();
+    $(".error").removeClass("error");
     $("#formModal fieldset").removeClass("validate", true);
 
-    formEnable();
-}
-
-function formResetId(formID) {
-    $(`#${formID}`)[0].reset();
-    $("#tbl-access tbody").html("");
-    $("#id").val("");
-    $(`#${formID} fieldset`).removeClass("validate", true);
+    if (select) {
+        $("#formModal select").val("").trigger("change");
+    }
 
     formEnable();
 }
@@ -265,62 +213,6 @@ function formEnableCustom(arrayField) {
     $.each(arrayField, function (k, v) {
         $(`#${v}`).removeAttr("disabled", true);
     });
-}
-
-function visitStatusLogic(data) {
-    let html = "";
-    switch (data) {
-        case "LUNAS":
-            html = `<div class='badge badge-success'>${data}</div>`;
-            break;
-        case "-":
-            html = `<div class='badge badge-danger'>${data}</div>`;
-            break;
-        default:
-            html = `<div class='badge badge-danger'>${data}</div>`;
-    }
-    return html;
-}
-
-function dpdLogic(data) {
-    let html = "",
-        str = data.toString();
-    // console.log(str.substring(0,1));
-    // console.log(str.substring(0,1));
-
-    switch (str.substring(0, 1)) {
-        case "-":
-            let res = data.substring(1);
-            html = `<div class='badge badge-danger'>+${res}</div>`;
-            break;
-        case "C":
-            html = `<div class='badge badge-success'>${data}</div>`;
-            break;
-        default:
-            html = `<div class='badge badge-warning'>-${data}</div>`;
-            break;
-    }
-
-    return html;
-}
-
-function releaseStatusColor(data) {
-    let html = "";
-    switch (data) {
-        case "NEW":
-            html = `<div class='badge badge-danger'>${data}</div>`;
-            break;
-        case "PENDING":
-            html = `<div class='badge badge-warning'>${data}</div>`;
-            break;
-        case "APPROVED":
-            html = `<div class='badge badge-success'>${data}</div>`;
-            break;
-        default:
-            html = `<div class='badge badge-sucess'>${data}</div>`;
-            break;
-    }
-    return html;
 }
 
 $(".number-only").on("input", function (event) {
@@ -578,4 +470,52 @@ const showLoading = function () {
         //     'success'
         // )
     });
+};
+
+chartColors = {
+    column: {
+        series1: "#826af9",
+        series2: "#d2b0ff",
+        bg: "#f8d3ff",
+    },
+    success: {
+        shade_100: "#7eefc7",
+        shade_200: "#06774f",
+    },
+    donut: {
+        series1: "#ffe700",
+        series2: "#00d4bd",
+        series3: "#826bf8",
+        series4: "#2b9bf4",
+        series5: "#FFA1A1",
+    },
+    area: {
+        series3: "#a4f8cd",
+        series2: "#60f2ca",
+        series1: "#2bdac7",
+    },
+};
+
+window.colors = {
+    solid: {
+        primary: "#7367F0",
+        secondary: "#82868b",
+        success: "#28C76F",
+        info: "#00cfe8",
+        warning: "#FF9F43",
+        danger: "#EA5455",
+        dark: "#4b4b4b",
+        black: "#000",
+        white: "#fff",
+        body: "#f8f8f8",
+    },
+    light: {
+        primary: "#7367F01a",
+        secondary: "#82868b1a",
+        success: "#28C76F1a",
+        info: "#00cfe81a",
+        warning: "#FF9F431a",
+        danger: "#EA54551a",
+        dark: "#4b4b4b1a",
+    },
 };
