@@ -15,7 +15,7 @@ Include simple Data Table (CRUD).
 
 | Feature | Status |
 | --- | --- |
-| Bootstrap Modern Admin Themes | OK |
+| Bootstrap Ubold Admin Themes | OK |
 | Auth Scaffolding | OK |
 | Roles & Permissions | OK |
 | Sweet Alert JS | OK |
